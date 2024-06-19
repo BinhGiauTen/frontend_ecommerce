@@ -1,24 +1,40 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import blog from "../images/blog-1.jpg";
 
-const BlogCard = () => {
+const BlogCard = (props) => {
+  const data = props;
+  console.log(data.data);
   return (
-    <div className="blog-card">
-      <div className="card-image">
-        <img src="images/blog-1.jpg" className="img-fluid w-100" alt="blog" />
-      </div>
-      <div className="blog-content">
-        <p className="date">11 JUNE, 2022</p>
-        <h5 className="title">A Beautiful Sunday Morning Renaissance</h5>
-        <p className="desc">
-          You're Only As Good As Your Last Collection, which is An Enormous
-          Pressure. I think There is Something About..
-        </p>
-        <Link to="/blog/:id" className="button">
-          Read More
-        </Link>
-      </div>
-    </div>
+    <>
+      {data.data?.map((item, index) => {
+        return (
+          <div className="col-6 mb-3" key={index}>
+            <div className="blog-card">
+              <div className="card-image">
+                <img
+                  src={item?.images[0]?.url || blog}
+                  className="img-fluid w-100"
+                  alt="blog"
+                />
+              </div>
+              <div className="blog-content">
+                <p className="date">{new Date(item?.createdAt).toLocaleString()}</p>
+                <h5 className="title">
+                  {item?.title}
+                </h5>
+                <p className="desc" dangerouslySetInnerHTML={{ __html: item?.description }}>
+                  
+                </p>
+                <Link to={`/blog/${item?._id}`} className="button">
+                  Read More
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </>
   );
 };
 

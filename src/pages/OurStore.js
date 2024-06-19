@@ -1,13 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BreadCrumb from "../components/BreadCrumb";
 import Meta from "../components/Meta";
 import ReactStars from "react-rating-stars-component";
 import ProductCard from "../components/ProductCard";
 import Color from "../components/Color";
 import Container from "../components/Container";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProduct } from "../features/products/productSlice";
 
 const OurStore = () => {
   const [grid, setGrid] = useState(2);
+  const productState = useSelector((state) => state.product.products);
+  console.log(productState);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  const getProducts = () => {
+    dispatch(getAllProduct());
+  };
 
   return (
     <>
@@ -198,9 +210,7 @@ const OurStore = () => {
                   </p>
                   <select name="" className="form-control form-select" id="">
                     <option value="manual">Featured</option>
-                    <option value="best-selling" >
-                      Best selling
-                    </option>
+                    <option value="best-selling">Best selling</option>
                     <option value="title-ascending">Alphabetically, A-Z</option>
                     <option value="title-descending">
                       Alphabetically, Z-A
@@ -253,8 +263,10 @@ const OurStore = () => {
             <div className="products-list pb-5 ">
               <div className="d-flex flex-wrap ">
                 <div className="row w-100">
-                  <ProductCard grid={grid} />
-                  <ProductCard grid={grid} />
+                  <ProductCard
+                    grid={grid}
+                    data={productState ? productState : []}
+                  />
                 </div>
               </div>
             </div>

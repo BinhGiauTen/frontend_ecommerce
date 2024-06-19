@@ -1,16 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BreadCrumb from "../components/BreadCrumb";
 import Meta from "../components/Meta";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import blog from "../images/blog-1.jpg";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import Container from "../components/Container";
+import { useDispatch, useSelector } from "react-redux";
+import { getaBlog } from "../features/blog/blogSlice";
 
 const SingleBlog = () => {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const getBlogId = location.pathname.split("/")[2];
+  useEffect(() => {
+    if (getBlogId !== undefined) {
+      dispatch(getaBlog(getBlogId));
+    } else {
+      console.log("Error get a blog");
+    }
+  }, [getBlogId]);
+  const blogState = useSelector((state) => state.blog);
   return (
     <>
-      <Meta title={"Dynamic Blog Name"} />
-      <BreadCrumb title="Dynamic Blog Name" />
+      <Meta title={blogState?.blogName} />
+      <BreadCrumb title={blogState?.blogName} />
       <Container class1="blog-wrapper home-wrapper-2 py-5">
         <div className="row">
           <div className="col-12">
@@ -19,19 +32,10 @@ const SingleBlog = () => {
                 <HiOutlineArrowLeft />
                 <span>Go back to Blogs</span>
               </Link>
-              <h3 className="title">A Beautiful Sunday Morning Renaissance</h3>
-              <img src={blog} className="w-100 img-fluid my-4" alt="blog" />
+              <h3 className="title">{blogState?.blogName}</h3>
+              <img src={blogState?.blogImages[0]?.url} className="w-100 img-fluid my-4" alt="blog" />
               <p>
-                You're only as good as your last collection, which is an
-                enormous pressure. I think there is something about luxury -
-                it's not something people need, but it's what they want. It
-                really pulls at their heart. I have a fantastic relationship
-                with money. Scelerisque soicosque ullamcorper urna You're only
-                as good as your last collection, which is an enormous pressure.
-                I think there is something about luxury - it's not something
-                people need, but it's what they want. It really pulls at their
-                heart. I have a fantastic relationship with money. Scelerisque
-                soicosque ullamcorper urna
+                {blogState?.blogDesc}
               </p>
             </div>
           </div>

@@ -7,6 +7,7 @@ import SpecialProduct from "../components/SpecialProduct";
 import FamousProduct from "../components/FamousProduct";
 import Container from "../components/Container";
 import { services } from "../utils/Data";
+import { useEffect } from "react";
 
 const Home = () => (
   <>

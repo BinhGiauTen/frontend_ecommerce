@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BreadCrumb from "../components/BreadCrumb";
 import Meta from "../components/Meta";
 import BlogCard from "../components/BlogCard";
 import Container from "../components/Container";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllBlog } from "../features/blog/blogSlice";
+
 const Blog = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getBlogsFromDb();
+  }, []);
+  const getBlogsFromDb = () => {
+    dispatch(getAllBlog());
+  };
+
+  const blogState = useSelector((state) => state?.blog?.blogs);
   return (
     <>
       <Meta title={"Blogs"} />
@@ -25,18 +38,7 @@ const Blog = () => {
           </div>
           <div className="col-9">
             <div className="row">
-              <div className="col-6 mb-3">
-                <BlogCard />
-              </div>
-              <div className="col-6 mb-3">
-                <BlogCard />
-              </div>
-              <div className="col-6 mb-3">
-                <BlogCard />
-              </div>
-              <div className="col-6 mb-3">
-                <BlogCard />
-              </div>
+              <BlogCard data={blogState ? blogState : []} />
             </div>
           </div>
         </div>
